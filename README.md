@@ -22,11 +22,11 @@ npm start
 
 - Once the sell by date has passed, `quality` degrades twice as fast
 - The `quality` of an item is never negative
-- **Aged Brie** actually increases in `quality` the older it gets
 - The `quality` of an item is never more than `50`
+- **Aged Brie** actually increases in `quality` the older it gets
 - **Sulfuras**, being a legendary item, never has to be sold or decreases in `quality`
-- **Backstage passes**, like aged brie, increases in `quality` as it's `sellIn` value approaches; `quality` increases by `2` when there are `10` days or less and by `3` when there are `5` days or less but `quality` drops to `0` after the concert
 - **Sulfuras** is a legendary item and as such its Quality is 80 and it never alters
+- **Backstage passes**, like aged brie, increases in `quality` as it's `sellIn` value approaches; `quality` increases by `2` when there are `10` days or less and by `3` when there are `5` days or less but `quality` drops to `0` after the concert
 
 ## New requirements
 
