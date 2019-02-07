@@ -1,34 +1,3 @@
-const rules = {
-  'Backstage passes to a TAFKAL80ETC concert': item => {
-    if (item.sellIn < 11) {
-      if (item.quality < 50) {
-        item.quality = item.quality + 1;
-      }
-    }
-    if (item.sellIn < 6) {
-      if (item.quality < 50) {
-        item.quality = item.quality + 1;
-      }
-    }
-    // return item
-  },
-  'Regular item': item => {
-    item.quality = item.quality - 1; //regular item
-  }
-}
-
-const regularChange = item => {
-  item.quality = item.quality - 1;
-}
-
-const change = item => {
-  if (item.name === 'Regular item') {
-    regularChange(item)
-    return
-  }
-  rules[item.name] && rules[item.name](item)
-}
-
 class Shop {
   constructor(items = []) {
     this.items = items;
@@ -44,7 +13,18 @@ class Shop {
       } else {
         if (this.items[i].quality < 50) {
           this.items[i].quality = this.items[i].quality + 1;
-          change(this.items[i]) // backstage pass
+          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
+            if (this.items[i].sellIn < 11) {
+              if (this.items[i].quality < 50) {
+                this.items[i].quality = this.items[i].quality + 1;
+              }
+            }
+            if (this.items[i].sellIn < 6) {
+              if (this.items[i].quality < 50) {
+                this.items[i].quality = this.items[i].quality + 1;
+              }
+            }
+          }
         }
       }
       if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
@@ -55,7 +35,7 @@ class Shop {
           if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
             if (this.items[i].quality > 0) {
               if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                change(this.items[i])
+                this.items[i].quality = this.items[i].quality - 1;
               }
             }
           } else {
