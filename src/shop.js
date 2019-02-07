@@ -1,33 +1,48 @@
 const rules = {
-  'Backstage passes to a TAFKAL80ETC concert': item => {
-    if (item.sellIn < 11) {
-      if (item.quality < 50) {
-        item.quality = item.quality + 1;
-      }
-    }
-    if (item.sellIn < 6) {
-      if (item.quality < 50) {
-        item.quality = item.quality + 1;
-      }
-    }
-    // return item
+  'Backstage passes to a TAFKAL80ETC concert':  ({quality, sellIn}) => {
+    if (sellIn < 0) return 0
+    if (quality < 50) quality++
+    if (quality < 50 && sellIn < 10) quality++
+    if (quality < 50 && sellIn < 5) quality++
+    return quality
   },
-  'Regular item': item => {
-    item.quality = item.quality - 1; //regular item
-  }
-}
 
-const regularChange = item => {
-  item.quality = item.quality - 1;
+  'Aged Brie': item => {
+    if (item.quality >= 50) return item.quality
+    if (item.quality < 50) {
+      item.quality = item.quality + 1;
+    }
+
+    if (item.quality < 50 && item.sellIn < 0) {
+      item.quality = item.quality + 1;
+    }
+    return item.quality
+  },
+
+  'Sulfuras, Hand of Ragnaros': item => {
+    item.sellIn++
+    return item.quality
+  },
+
+  'Regular item': item => {
+    if (item.quality >= 50) return item.quality
+    if (item.quality > 0) {
+      item.quality = item.quality - 1;
+    }
+    if (item.quality > 0 && item.sellIn < 0) {
+      item.quality = item.quality - 1;
+    }
+    return item.quality
+  }
 }
 
 const change = item => {
-  if (item.name === 'Regular item') {
-    regularChange(item)
-    return
+  item.sellIn--
+  if(rules[item.name]) {
+    item.quality = rules[item.name](item)
   }
-  rules[item.name] && rules[item.name](item)
 }
+
 
 class Shop {
   constructor(items = []) {
@@ -35,40 +50,8 @@ class Shop {
   }
   updateQuality() {
     for (var i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1;
-          }
-        }
-      } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
-          change(this.items[i]) // backstage pass
-        }
-      }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                change(this.items[i])
-              }
-            }
-          } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality;
-          }
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
-          }
-        }
-      }
+      change(this.items[i])
     }
-
     return this.items;
   }
 }

@@ -9,6 +9,7 @@ const ShopOld = require('../src/shopOld.js');
 const Item = require('../src/item.js');
 
 describe('Refactoring Kata', function () {
+  console.clear()
 
 
   it('expect true to be true', function () {
